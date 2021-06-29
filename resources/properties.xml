@@ -1,0 +1,68 @@
+<resources>
+
+	<properties>
+		<property id="units_altitude" type="number">1</property>
+        <property id="units_speed" type="number">0</property>
+        <property id="units_vspeed" type="number">1</property>
+        <property id="units_distance" type="number">0</property>
+        <property id="start_speed" type="number">5</property>
+        <property id="clock_type" type="number">0</property>
+    </properties>
+
+    <strings>
+    	<string id="units_altitude_title">Altitude units</string>
+		<string id="m">m</string>
+        <string id="ft">ft</string>
+        <string id="units_speed_title">Speed units</string>
+        <string id="kmh">km/h</string>
+        <string id="mph">mph</string>
+        <string id="units_vspeed_title">Vertical speed units</string>
+        <string id="mps">m/s</string>
+        <string id="fpm">fpm</string>
+        <string id="units_distance_title">Distance units</string>
+        <string id="km">km</string>
+        <string id="mi">mi</string>
+        <string id="start_speed_title">Auto-start speed (in selected units)</string>
+        <string id="clock_type_title">Clock format</string>
+        <string id="clock_type_system">System setting</string>
+        <string id="clock_type_24h">Force 24h</string>
+        <string id="clock_type_12h">Force 12h</string>
+    </strings>
+
+	<settings>
+	  <setting propertyKey="@Properties.units_altitude" title="@Strings.units_altitude_title">
+			<settingConfig type="list">
+				<listEntry value="0">@Strings.m</listEntry>
+				<listEntry value="1">@Strings.ft</listEntry>
+			</settingConfig>
+	    </setting>
+		<setting propertyKey="@Properties.units_speed" title="@Strings.units_speed_title">
+			<settingConfig type="list">
+				<listEntry value="0">@Strings.kmh</listEntry>
+				<listEntry value="1">@Strings.mph</listEntry>
+			</settingConfig>
+	    </setting>
+	    <setting propertyKey="@Properties.units_vspeed" title="@Strings.units_vspeed_title">
+			<settingConfig type="list">
+				<listEntry value="0">@Strings.mps</listEntry>
+				<listEntry value="1">@Strings.fpm</listEntry>
+			</settingConfig>
+	    </setting>
+	    <setting propertyKey="@Properties.units_distance" title="@Strings.units_distance_title">
+			<settingConfig type="list">
+				<listEntry value="0">@Strings.km</listEntry>
+				<listEntry value="1">@Strings.mi</listEntry>
+			</settingConfig>
+	    </setting>
+	    <setting propertyKey="@Properties.start_speed" title="@Strings.start_speed_title">
+			<settingConfig type="numeric" min = "0"/>
+	    </setting>
+	    <setting propertyKey="@Properties.clock_type" title="@Strings.clock_type_title">
+			<settingConfig type="list">
+				<listEntry value="0">@Strings.clock_type_system</listEntry>
+				<listEntry value="1">@Strings.clock_type_24h</listEntry>
+				<listEntry value="2">@Strings.clock_type_12h</listEntry>
+			</settingConfig>
+	    </setting>
+	</settings>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <fonts>
+        <font id="B612Bold_75" filename="fonts/B612-Bold_75.fnt" filter="0123456789.:- " antialias="true" />
+        <font id="B612Bold_65" filename="fonts/B612-Bold_65.fnt" filter="0123456789.:- " antialias="true" />
+        <font id="B612Bold_40" filename="fonts/B612-Bold_40.fnt" filter="0123456789.:+-amp " antialias="true" />
+		<font id="B612Bold_25" filename="fonts/B612-Bold_25.fnt" filter="0123456789.:amp " antialias="true" />
+    </fonts>
+</resources>
