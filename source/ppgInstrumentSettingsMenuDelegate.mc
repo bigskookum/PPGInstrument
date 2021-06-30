@@ -21,6 +21,8 @@ class settingsMenuDelegate extends WatchUi.MenuInputDelegate {
         	WatchUi.pushView(new $.Rez.Menus.auxMenu_clock_type(), new $.auxMenu_clock_typeDelegate(), WatchUi.SLIDE_LEFT);
         } else if (item == :settingsMenu_in_device_menu) {
         	WatchUi.pushView(new $.Rez.Menus.auxMenu_in_device_menu(), new $.auxMenu_in_device_menuDelegate(), WatchUi.SLIDE_LEFT);
+        } else if (item == :settingsMenu_sw_version) {
+        	WatchUi.pushView(new $.Rez.Menus.auxMenu_sw_version(), new $.auxMenu_sw_version(), WatchUi.SLIDE_LEFT);
         }
     }
 }

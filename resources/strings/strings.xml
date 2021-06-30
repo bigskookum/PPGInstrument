@@ -1,5 +1,8 @@
 <strings>
     <string id="AppName">PPG Instrument</string>
+    <string id="AppVersion">1.2.0</string>
+    <string id="AppVersionString">Version 1.2.0</string>
+    <string id="AppCompileDate">2021-06-30</string>
 
     <string id="WaitingGPS">Waiting for GPS</string>
 </strings>
