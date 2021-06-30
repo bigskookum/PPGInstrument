@@ -16,7 +16,6 @@ using Toybox.Attention;
 // TODO: make colours configurable.
 // TODO: play with the backlight while flying to see if it makes a difference.
 // TODO: auto zero altitude on takeoff option for people who want AGL.
-// TODO: in-watch menu? with option to disable?
 // TODO: check for TODOs.
 
 var homeTrianglePoints;

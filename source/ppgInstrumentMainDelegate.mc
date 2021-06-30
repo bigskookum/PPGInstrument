@@ -25,9 +25,16 @@ class ppgInstrumentMainDelegate extends WatchUi.BehaviorDelegate {
 	{
 		if(evt.getKey() == WatchUi.KEY_ESC)
 		{
-			var cd = new WatchUi.Confirmation( $.Rez.Strings.quitConf );
+			var cd = new WatchUi.Confirmation( WatchUi.loadResource($.Rez.Strings.quitConf) );
 			WatchUi.pushView( cd, new QuitDelegate(), WatchUi.SLIDE_IMMEDIATE );
 		}
+		return true;
+	}
+	
+	function onBack() {
+		// do the same thing as above.
+		var cd = new WatchUi.Confirmation( WatchUi.loadResource($.Rez.Strings.quitConf) );
+		WatchUi.pushView( cd, new QuitDelegate(), WatchUi.SLIDE_IMMEDIATE );
 		return true;
 	}
 	
