@@ -1,0 +1,32 @@
+<!-- layout for round-240x240 -->
+
+<layout id="mainLayout">
+	<drawable id="white_background" />
+	<drawable id="homeTriangle" class="dhomeTriangle" />
+	<drawable id="upper_line" />
+	<drawable id="lower_line" />
+	<drawable id="vert_line" />
+	<drawable id="lowest_line" />
+	
+	<label id="lblVs" text="-000" x="36%" y="25%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_BLACK" />
+	<label id="lblVsLbl" text="fpm" x="36%" y="15%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	
+	<label id="lblSpeed" text="00" x="30%" y="38%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_BLACK" />
+	<label id="lblSpeedLblk" text="k" x="36%" y="38%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	<label id="lblSpeedLblm" text="m" x="36%" y="47%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	<label id="lblSpeedLblh" text="h" x="36%" y="56%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	
+	<label id="lblHeading" text="000" x="35%" y="64%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_BLACK" />
+	<label id="lblHeadingLbl" text="track" x="35%" y="76%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	
+	<label id="lblAltMsl" text="0000" x="39%" y="38%" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_BLACK" />
+	<label id="lblAltMslLbl" text="ft" x="95%" y="56%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	
+	<label id="lblCurrentTime" text="00:00:00" x="50%" y="87%" justification="Graphics.TEXT_JUSTIFY_CENTER" color="Graphics.COLOR_BLACK" />
+	<label id="lblMissionTimer" text="-:--" x="39%" y="12%" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_BLACK" />
+	
+	<label id="lblDistHome" text="00.0" x="70%" y="64%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_BLACK" />
+	<label id="lblDistHomeLbl" text="home" x="71%" y="66%" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+	<label id="lblDistTrack" text="000" x="62%" y="74%" justification="Graphics.TEXT_JUSTIFY_RIGHT" color="Graphics.COLOR_BLACK" />
+	<label id="lblDistTrackLbl" text="tot km" x="63%" y="76%" justification="Graphics.TEXT_JUSTIFY_LEFT" color="Graphics.COLOR_DK_BLUE" font="Graphics.FONT_XTINY" />
+</layout>

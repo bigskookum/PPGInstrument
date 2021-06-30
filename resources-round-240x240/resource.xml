@@ -1,0 +1,57 @@
+<!-- 
+approachs60
+d2charlie
+d2delta
+d2deltapx
+d2deltas
+descentmk1
+descentmk2s
+fenix5
+fenix5plus
+fenix5splus
+fenix5x
+fenix5xplus
+fenix6s
+fenix6spro
+fr245
+fr245m
+fr645
+fr645m
+fr745
+fr935
+fr945
+fr945lte
+marqadventurer
+marqathlete
+marqaviator
+marqcaptain
+marqcommander
+marqdriver
+marqexpedition
+marqgolfer
+ -->
+
+<resources>
+    <fonts>
+        <font id="B612Bold_xl" filename="../resources/resource/fonts/B612-Bold_75.fnt" filter="0123456789.:- " antialias="true" />
+        <font id="B612Bold_l" filename="../resources/resource/fonts/B612-Bold_65.fnt" filter="0123456789." antialias="true" />
+        <font id="B612Bold_m" filename="../resources/resource/fonts/B612-Bold_40.fnt" filter="0123456789.+- " antialias="true" />
+		<font id="B612Bold_s" filename="../resources/resource/fonts/B612-Bold_25.fnt" filter="0123456789:amp " antialias="true" />
+    </fonts>
+    
+    <drawable-list id="white_background">
+        <shape type="rectangle" width="fill" height="fill" color="Graphics.COLOR_WHITE" />
+    </drawable-list>
+    <drawable-list id="upper_line">
+        <shape type="rectangle" x="0" width="fill" y="39%" height="1" color="Graphics.COLOR_DK_GRAY" />
+    </drawable-list>
+    <drawable-list id="lower_line">
+        <shape type="rectangle" x="0" width="fill" y="66%" height="1" color="Graphics.COLOR_DK_GRAY" />
+    </drawable-list>
+    <drawable-list id="vert_line">
+        <shape type="rectangle" x="37%" width="1" y="15%" height="73%" color="Graphics.COLOR_DK_GRAY" />
+    </drawable-list>
+    <drawable-list id="lowest_line">
+        <shape type="rectangle" x="0" width="fill" y="88%" height="1" color="Graphics.COLOR_DK_GRAY" />
+    </drawable-list>
+</resources>

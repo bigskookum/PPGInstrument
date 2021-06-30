@@ -1,14 +1,18 @@
 <!-- 
-default resources
-same as fenix 5x
+approachs62
+fenix6
+fenix6pro
+legacyherofirstavenger
+legacysagadarthvader
+vivoactive4
  -->
 
 <resources>
     <fonts>
-        <font id="B612Bold_xl" filename="fonts/B612-Bold_75.fnt" filter="0123456789.:- " antialias="true" />
-        <font id="B612Bold_l" filename="fonts/B612-Bold_65.fnt" filter="0123456789." antialias="true" />
-        <font id="B612Bold_m" filename="fonts/B612-Bold_40.fnt" filter="0123456789.+- " antialias="true" />
-		<font id="B612Bold_s" filename="fonts/B612-Bold_25.fnt" filter="0123456789:amp " antialias="true" />
+        <font id="B612Bold_xl" filename="../resources/resource/fonts/B612-Bold_80.fnt" filter="0123456789.:- " antialias="true" />
+        <font id="B612Bold_l" filename="../resources/resource/fonts/B612-Bold_65.fnt" filter="0123456789." antialias="true" />
+        <font id="B612Bold_m" filename="../resources/resource/fonts/B612-Bold_45.fnt" filter="0123456789.+- " antialias="true" />
+		<font id="B612Bold_s" filename="../resources/resource/fonts/B612-Bold_28.fnt" filter="0123456789:amp " antialias="true" />
     </fonts>
     
     <drawable-list id="white_background">
@@ -21,7 +25,7 @@ same as fenix 5x
         <shape type="rectangle" x="0" width="fill" y="66%" height="1" color="Graphics.COLOR_DK_GRAY" />
     </drawable-list>
     <drawable-list id="vert_line">
-        <shape type="rectangle" x="88" width="1" y="15%" height="73%" color="Graphics.COLOR_DK_GRAY" />
+        <shape type="rectangle" x="37%" width="1" y="15%" height="73%" color="Graphics.COLOR_DK_GRAY" />
     </drawable-list>
     <drawable-list id="lowest_line">
         <shape type="rectangle" x="0" width="fill" y="88%" height="1" color="Graphics.COLOR_DK_GRAY" />

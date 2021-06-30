@@ -12,29 +12,28 @@ using Toybox.Activity;
 using Toybox.ActivityRecording;
 using Toybox.Attention;
 
+var homeTrianglePoints;
+
+class dhomeTriangle extends WatchUi.Drawable {
+
+	public function initialize(params as Dictionary) {
+		Drawable.initialize(params);
+	}
+
+    function draw(dc as Dc) as Void {
+    	dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
+    	if (homeTrianglePoints != null) {
+        	dc.fillPolygon(homeTrianglePoints);
+        }
+    }
+}
+
 class ppgInstrumentMain extends WatchUi.View {
 
-	var B612Bold_75 as FontResource?;
-	var B612Bold_65 as FontResource?;
-	var B612Bold_40 as FontResource?;
-	var B612Bold_25 as FontResource?;
-
-	var lblVs;
-	var lblVsLbl;
-	var lblSpeed;
-	var lblSpeedLblk;
-	var lblSpeedLblm;
-	var lblSpeedLblh;
-	var lblHeading;
-	var lblHeadingLbl;
-	var lblAltMsl;
-	var lblAltMslLbl;
-	var lblCurrentTime;
-	var lblMissionTimer;
-	var lblDistHome;
-	var lblDistHomeLbl;
-	var lblDistTrack;
-	var lblDistTrackLbl;
+	var B612Bold_xl as FontResource?;
+	var B612Bold_l as FontResource?;
+	var B612Bold_m as FontResource?;
+	var B612Bold_s as FontResource?;
 	
 	var altForVSpeed = new[5];
 	var vSpeedVal;
@@ -54,94 +53,72 @@ class ppgInstrumentMain extends WatchUi.View {
     function initialize() {
         View.initialize();
         
+        B612Bold_xl = WatchUi.loadResource($.Rez.Fonts.B612Bold_xl) as FontResource;
+        B612Bold_l = WatchUi.loadResource($.Rez.Fonts.B612Bold_l) as FontResource;
+        B612Bold_m = WatchUi.loadResource($.Rez.Fonts.B612Bold_m) as FontResource;
+        B612Bold_s = WatchUi.loadResource($.Rez.Fonts.B612Bold_s) as FontResource;
+        
         settings = System.getDeviceSettings();
         w = settings.screenWidth;
         h = settings.screenHeight;
 
-        B612Bold_75 = WatchUi.loadResource($.Rez.Fonts.B612Bold_75) as FontResource;
-        B612Bold_65 = WatchUi.loadResource($.Rez.Fonts.B612Bold_65) as FontResource;
-        B612Bold_40 = WatchUi.loadResource($.Rez.Fonts.B612Bold_40) as FontResource;
-        B612Bold_25 = WatchUi.loadResource($.Rez.Fonts.B612Bold_25) as FontResource;
-        
-        lblVs = new WatchUi.Text({:text=>"-000", :font=>B612Bold_40, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.36), :locY=>(h*0.25)});
-        lblVsLbl = new WatchUi.Text({:text=>"fpm", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.36), :locY=>(h*0.15)});
-        lblSpeed = new WatchUi.Text({:text=>"00", :font=>B612Bold_75, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.3), :locY=>(h*0.38)});
-        lblSpeedLblk = new WatchUi.Text({:text=>"k", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.36), :locY=>(h*0.38)});
-        lblSpeedLblm = new WatchUi.Text({:text=>"m", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.36), :locY=>(h*0.47)});
-        lblSpeedLblh = new WatchUi.Text({:text=>"h", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.36), :locY=>(h*0.56)});
-        lblHeading = new WatchUi.Text({:text=>"000", :font=>B612Bold_40, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.35), :locY=>(h*0.64)});
-        lblHeadingLbl = new WatchUi.Text({:text=>"track", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.35), :locY=>(h*0.76)});
-        lblAltMsl = new WatchUi.Text({:text=>"0000", :font=>B612Bold_75, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_LEFT, :locX=>(w*0.39), :locY=>(h*0.38)});
-        lblAltMslLbl = new WatchUi.Text({:text=>"ft", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.95), :locY=>(h*0.56)});
-        lblCurrentTime = new WatchUi.Text({:text=>"00:00:00", :font=>B612Bold_25, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_CENTER, :locX=>(w*0.5), :locY=>(h*0.87)});
-        lblMissionTimer = new WatchUi.Text({:text=>"-:--", :font=>B612Bold_75, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_LEFT, :locX=>(w*0.39), :locY=>(h*0.12)});
-        
-        lblDistHome = new WatchUi.Text({:text=>"00.0", :font=>B612Bold_40, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.70), :locY=>(h*0.64)});
-        lblDistHomeLbl = new WatchUi.Text({:text=>"home", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_LEFT, :locX=>(w*0.71), :locY=>(h*0.66)});
-        lblDistTrack = new WatchUi.Text({:text=>"000", :font=>B612Bold_40, :color=>Graphics.COLOR_BLACK, :justification=>Graphics.TEXT_JUSTIFY_RIGHT, :locX=>(w*0.62), :locY=>(h*0.74)});
-        lblDistTrackLbl = new WatchUi.Text({:text=>"tot km", :font=>Graphics.FONT_XTINY, :color=>Graphics.COLOR_DK_BLUE, :justification=>Graphics.TEXT_JUSTIFY_LEFT, :locX=>(w*0.63), :locY=>(h*0.76)});
-        
-        oneSecondTimer = new Timer.Timer();
-        
-        Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:gpsUpdatedCallback));
-        
-        Sensor.setEnabledSensors([] as Array<SensorType>);
-        Sensor.enableSensorEvents(method(:sensorCallback));
-        
         for (var i = 0; i < 5; i++) {
         	altForVSpeed[i] = 0;
         }
     }
 
     function onLayout(dc) {
+    	setLayout($.Rez.Layouts.mainLayout(dc));
+    	
+    	Position.enableLocationEvents(Position.LOCATION_CONTINUOUS, method(:gpsUpdatedCallback));
+        
+        Sensor.setEnabledSensors([] as Array<SensorType>);
+        Sensor.enableSensorEvents(method(:sensorCallback));
+        
+        oneSecondTimer = new Timer.Timer();
+    	
+    	View.findDrawableById("lblVs").setFont(B612Bold_m);
+    	View.findDrawableById("lblSpeed").setFont(B612Bold_xl);
+    	View.findDrawableById("lblHeading").setFont(B612Bold_m);
+    	View.findDrawableById("lblAltMsl").setFont(B612Bold_xl);
+    	View.findDrawableById("lblCurrentTime").setFont(B612Bold_s);
+    	View.findDrawableById("lblMissionTimer").setFont(B612Bold_xl);
+    	View.findDrawableById("lblDistHome").setFont(B612Bold_m);
+    	View.findDrawableById("lblDistTrack").setFont(B612Bold_m);
+    
+    	// on startup, go immediately to GPS wait screen.
         pushView(new ppgInstrumentWaitingGPS(), new ppgInstrumentWaitingDelegate(), WatchUi.SLIDE_IMMEDIATE);
         
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_WHITE);
-        dc.clear();
     }
     
     function onShow() {
     	oneSecondTimer.start(method(:oneSecondTimerCallback), 1000, true);
     }
     
-    function onUpdate(dc) {    	
-    	dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_WHITE);
-        dc.clear();
-        
-        dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_TRANSPARENT);
-        dc.drawLine(0, h*0.39, w, h*0.39); // horiz upper line
-        dc.drawLine(0, h*0.66, w, h*0.66); // horiz lower line
-        dc.drawLine(w*0.37, h*0.15, w*0.37, h*0.88); // vertical line
-        dc.drawLine(0, h*0.88, w, h*0.88); // horiz lowest line
-        
-        if (recordingState >= 1) {
-	        var screenCenterPoint = [w/2, h/2] as Array<Number>;
-	    	dc.setColor(Graphics.COLOR_GREEN, Graphics.COLOR_TRANSPARENT);
-	    	dc.fillPolygon(generateHomeTriangleCoordinates(screenCenterPoint, homeAngleRad - Math.PI, 30, 50, w/2)); // centerpoint, angleRad, height, width, offset
-	    	
-	    	lblDistHome.draw(dc);
-			lblDistHomeLbl.draw(dc);
-	    	lblDistTrack.draw(dc);
-			lblDistTrackLbl.draw(dc);
+    function onUpdate(dc) {
+
+        if (recordingState < 1) {
+        	// blank out data.
+        	View.findDrawableById("lblDistHome").setText("");
+        	View.findDrawableById("lblDistHomeLbl").setText("");
+        	View.findDrawableById("lblDistTrack").setText("");
+        	View.findDrawableById("lblDistTrackLbl").setText("");
     	}
-        
-        lblVs.draw(dc);
-        lblVsLbl.draw(dc);
-        lblSpeed.draw(dc);
-        lblSpeedLblk.draw(dc);
-        lblSpeedLblm.draw(dc);
-        lblSpeedLblh.draw(dc);
-        lblHeading.draw(dc);
-        lblHeadingLbl.draw(dc);
-        lblAltMsl.draw(dc);
-        lblAltMslLbl.draw(dc);
-        lblCurrentTime.draw(dc);
-        lblMissionTimer.draw(dc);
+
+        View.onUpdate(dc);
     }
     
     function onHide() {
     	oneSecondTimer.stop();
     }
+    
+    
+    /*****************************************************
+                         CALLBACKS
+                     gpsUpdatedCallback
+                   oneSecondTimerCallback
+                      sensorCallback
+    *****************************************************/
     
     function gpsUpdatedCallback(info) {
     	var speed as float;
@@ -162,16 +139,16 @@ class ppgInstrumentMain extends WatchUi.View {
     		
     		if (units_speed == 0 ) { // km/h
     			speed = info.speed * 3.6f; // convert m/s to km/h
-    			lblSpeedLblk.setText("k");
-    			lblSpeedLblm.setText("m");
+    			View.findDrawableById("lblSpeedLblk").setText("k");
+    			View.findDrawableById("lblSpeedLblm").setText("m");
     		} else { // ==1 is mph
     			speed = info.speed * 2.23694f; // convert m/s to mph
-    			lblSpeedLblk.setText("m");
-    			lblSpeedLblm.setText("p");
+    			View.findDrawableById("lblSpeedLblk").setText("m");
+    			View.findDrawableById("lblSpeedLblm").setText("p");
     		}
     		
-    		lblSpeed.setText(speed.format("%2.0f"));
-			lblHeading.setText(headingDeg.format("%3.0f")); // source in true degrees
+    		View.findDrawableById("lblSpeed").setText(speed.format("%2.0f"));
+			View.findDrawableById("lblHeading").setText(headingDeg.format("%3.0f")); // source in true degrees
 			
 			if (recordingState >= 1) {
 				var distHome;
@@ -179,6 +156,12 @@ class ppgInstrumentMain extends WatchUi.View {
 				var thisLocationRads = info.position.toRadians();
 				distHome = distance_rad_m(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) ;
 				homeAngleRad = bearing_rad_rad(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) - info.heading;
+				
+				// there are both screens that are wider than tall (fr920xt) and taller than wide (vivoactive HR)
+		    	// so find the smallest dimension before drawing the circle.
+		    	var minDim = w > h ? h : w;
+		    	var screenCenterPoint = [w/2, h/2] as Array<Number>;
+				homeTrianglePoints = generateHomeTriangleCoordinates(screenCenterPoint, homeAngleRad - Math.PI, 30, 50, minDim/2);
 				
 				var actInfo = Activity.getActivityInfo();
 				
@@ -193,13 +176,13 @@ class ppgInstrumentMain extends WatchUi.View {
 				}
 				
 					if (units_distance == 0) { // 0 == km
-						lblDistHome.setText((Math.floor(distHome / 100.0f)/10).format("%2.1f"));
-						lblDistTrack.setText(Math.floor(actInfo.elapsedDistance / 1000f).format("%3.0f"));
-						lblDistTrackLbl.setText("tot km");
+						View.findDrawableById("lblDistHome").setText((Math.floor(distHome / 100.0f)/10).format("%2.1f"));
+						View.findDrawableById("lblDistTrack").setText(Math.floor(actInfo.elapsedDistance / 1000f).format("%3.0f"));
+						View.findDrawableById("lblDistTrackLbl").setText("tot km");
 					} else { // 1 == mi
-						lblDistHome.setText((Math.floor(distHome / 160.934f)/10).format("%2.1f"));
-						lblDistTrack.setText(Math.floor(actInfo.elapsedDistance / 1609.34f).format("%3.0f"));
-						lblDistTrackLbl.setText("tot mi");
+						View.findDrawableById("lblDistHome").setText((Math.floor(distHome / 160.934f)/10).format("%2.1f"));
+						View.findDrawableById("lblDistTrack").setText(Math.floor(actInfo.elapsedDistance / 1609.34f).format("%3.0f"));
+						View.findDrawableById("lblDistTrackLbl").setText("tot mi");
 					}
 				}
 				//Toybox.System.println(distHome.format("%.1f"));
@@ -220,11 +203,14 @@ class ppgInstrumentMain extends WatchUi.View {
 				startLocation = info.position;
 				session.start();
 				recordingState = 1;
+				
+				View.findDrawableById("lblDistHomeLbl").setText("home");
+				View.findDrawableById("lblDistTrackLbl").setText("tot");
 			}
 			
 			//Toybox.System.println(info.heading.toString());
     		WatchUi.requestUpdate();
-    	}
+    	} // if (info.accuracy == 4)
     }
     
     function oneSecondTimerCallback() {
@@ -260,12 +246,12 @@ class ppgInstrumentMain extends WatchUi.View {
 			}
 			nowString = now.hour.format("%d") + ":" + now.min.format("%02d") + ":" + now.sec.format("%02d") + ampm;
     	}
-    	lblCurrentTime.setText(nowString);
+    	View.findDrawableById("lblCurrentTime").setText(nowString);
     	
     	if (recordingState >= 1) {
     		var timerDuration = Time.now().subtract(startMoment);
     		var timerString = (timerDuration.value() / 3600).format("%01.0f") + ":" + (timerDuration.value() / 60).format("%02.0f");
-    		lblMissionTimer.setText(timerString);
+    		View.findDrawableById("lblMissionTimer").setText(timerString);
     	}
     	
     	var positionInfo = Position.getInfo();
@@ -296,30 +282,30 @@ class ppgInstrumentMain extends WatchUi.View {
     	if (units_altitude == 0 ) { // m
     		alt = info.altitude;
     		// we ignore the case where altitude is greater than 10 km.
-    		lblAltMslLbl.setText("");
-    		lblAltMsl.setText((alt).format("%.0f"));
-			lblAltMsl.setFont(B612Bold_75);
+    		View.findDrawableById("lblAltMslLbl").setText("");
+    		View.findDrawableById("lblAltMsl").setText((alt).format("%.0f"));
+			View.findDrawableById("lblAltMsl").setFont(B612Bold_xl);
 			if (alt < 1000.0f) {
-				lblAltMslLbl.setText("m");
+				View.findDrawableById("lblAltMslLbl").setText("m");
 			} else {
-				lblAltMslLbl.setText("");
+				View.findDrawableById("lblAltMslLbl").setText("");
 			}
     	} else { // ==1 is ft
     		alt = Math.round(info.altitude * 3.28084f / 10.0f) * 10.0f; // convert m to ft
     		if (alt >= 10000.0f) {
 				alt = alt / 1000.0f;
-				lblAltMslLbl.setText("k ft");
-				lblAltMsl.setText((alt).format("%2.2f"));
-				lblAltMsl.setFont(B612Bold_65);
-				lblAltMslLbl.setLocation(w*0.95,h*0.56);
+				View.findDrawableById("lblAltMslLbl").setText("k ft");
+				View.findDrawableById("lblAltMsl").setText((alt).format("%2.2f"));
+				View.findDrawableById("lblAltMsl").setFont(B612Bold_l);
+				// lblAltMslLbl.setLocation(w*0.95,h*0.56); // forget why this was here.
 			} else {
 				if (alt < 1000.0f) {
-					lblAltMslLbl.setText("ft");
+					View.findDrawableById("lblAltMslLbl").setText("ft");
 				} else {
-					lblAltMslLbl.setText("");
+					View.findDrawableById("lblAltMslLbl").setText("");
 				}
-				lblAltMsl.setText((alt).format("%.0f"));
-				lblAltMsl.setFont(B612Bold_75);
+				View.findDrawableById("lblAltMsl").setText((alt).format("%.0f"));
+				View.findDrawableById("lblAltMsl").setFont(B612Bold_xl);
 			}
     	}
 		
@@ -348,11 +334,11 @@ class ppgInstrumentMain extends WatchUi.View {
     	
     		if (units_vspeed == 1 ) { // 0 == mps; 1 == fpm
     			vSpeedVal = vSpeedVal * 196.85f; // convert to feet per minute
-	    		lblVs.setText(vSpeedVal.format("%+3.0f"));
-	    		lblVsLbl.setText("fpm");
+	    		View.findDrawableById("lblVs").setText(vSpeedVal.format("%+3.0f"));
+	    		View.findDrawableById("lblVsLbl").setText("fpm");
     		} else {
-    			lblVs.setText(vSpeedVal.format("%+.1f"));
-    			lblVsLbl.setText("m/s");
+    			View.findDrawableById("lblVs").setText(vSpeedVal.format("%+.1f"));
+    			View.findDrawableById("lblVsLbl").setText("m/s");
     		}
 		} else {
 			vSpeedValValidCount--;
@@ -363,8 +349,18 @@ class ppgInstrumentMain extends WatchUi.View {
     	WatchUi.requestUpdate();
     }
     
-    // note: zero angle is pointing DOWN.
+    
+    /*****************************************************
+                     UTILITY FUNCTIONS
+               generateHomeTriangleCoordinates
+                      distance_rad_m
+                      bearing_rad_rad
+    *****************************************************/
+    
 	function generateHomeTriangleCoordinates(centerPoint as Array<Number>, angle as Float, height as Number, width as Number, offset as Number) as Array< Array<Float> > {
+		// generates the points for a triagle, pointing a certain angle, near the edge of the screen.
+		 // note: zero angle is pointing DOWN.
+		
         // Map out the coordinates of the triangle
         var coords = [[0, 0+offset] as Array<Number>,
                       [-(width / 2), -height+offset] as Array<Number>,
@@ -385,6 +381,7 @@ class ppgInstrumentMain extends WatchUi.View {
     }
 	
 	function distance_rad_m(lat1, lon1, lat2, lon2) {
+		// computes the distance (in meters) beteween two coordinates (in radians).
 		var dy = (lat2-lat1);
 		var dx = (lon2-lon1);
 		
@@ -402,9 +399,9 @@ class ppgInstrumentMain extends WatchUi.View {
 		return R * c;
 	}
 	
-	// 1 = start location, 2 = this location
-	// bearing points from this to start
 	function bearing_rad_rad(lat1, lon1, lat2, lon2) {
+		// computes the angle (in radians) between two coordinates (in radians) with north reference,
+		// starting from the second coordinate, pointing to the first.
 		var y = Math.sin(lon1-lon2) * Math.cos(lat1);
 		var x = Math.cos(lat2) * Math.sin(lat1) - Math.sin(lat2) * Math.cos(lat1) * Math.cos(lon1-lon2);
 		var theta = Math.atan2(y, x);

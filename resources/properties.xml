@@ -5,7 +5,7 @@
         <property id="units_speed" type="number">0</property>
         <property id="units_vspeed" type="number">1</property>
         <property id="units_distance" type="number">0</property>
-        <property id="start_speed" type="number">5</property>
+        <property id="start_speed" type="number">15</property>
         <property id="clock_type" type="number">0</property>
     </properties>
 
