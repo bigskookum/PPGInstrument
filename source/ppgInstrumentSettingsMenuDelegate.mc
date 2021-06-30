@@ -16,7 +16,7 @@ class settingsMenuDelegate extends WatchUi.MenuInputDelegate {
         } else if (item == :settingsMenu_units_distance) {
 			WatchUi.pushView(new $.Rez.Menus.auxMenu_units_distance(), new $.auxMenu_units_distanceDelegate(), WatchUi.SLIDE_LEFT);
         } else if (item == :settingsMenu_start_speed) {
-        	WatchUi.pushView(new $.start_speed_picker(), new $.start_speed_pickerDelegate(), WatchUi.SLIDE_LEFT);
+        	WatchUi.pushView(new $.start_speed_picker(), new $.start_speed_pickerDelegate(), WatchUi.SLIDE_IMMEDIATE);
         } else if (item == :settingsMenu_clock_type) {
         	WatchUi.pushView(new $.Rez.Menus.auxMenu_clock_type(), new $.auxMenu_clock_typeDelegate(), WatchUi.SLIDE_LEFT);
         } else if (item == :settingsMenu_in_device_menu) {
