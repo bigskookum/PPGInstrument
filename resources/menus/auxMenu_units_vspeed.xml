@@ -1,0 +1,4 @@
+<menu id="auxMenu_units_vspeed" title="@Strings.units_vspeed_title_sshort">
+    <menu-item id="auxMenu_units_vspeed_mps" label="@Strings.mps"/>
+    <menu-item id="auxMenu_units_vspeed_fpm" label="@Strings.fpm"/>
+</menu>

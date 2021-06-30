@@ -7,26 +7,42 @@
         <property id="units_distance" type="number">0</property>
         <property id="start_speed" type="number">15</property>
         <property id="clock_type" type="number">0</property>
+        <property id="in_device_menu" type="boolean">true</property>
     </properties>
 
     <strings>
     	<string id="units_altitude_title">Altitude units</string>
+    	<string id="units_altitude_title_short">Alt. units</string>
 		<string id="m">m</string>
+		<string id="meters">meters</string>
         <string id="ft">ft</string>
+        <string id="feet">feet</string>
         <string id="units_speed_title">Speed units</string>
+        <string id="units_speed_title_short">Speed</string>
         <string id="kmh">km/h</string>
         <string id="mph">mph</string>
         <string id="units_vspeed_title">Vertical speed units</string>
+        <string id="units_vspeed_title_short">Vert speed units</string>
+        <string id="units_vspeed_title_sshort">Vert speed</string>
         <string id="mps">m/s</string>
         <string id="fpm">fpm</string>
         <string id="units_distance_title">Distance units</string>
+        <string id="units_distance_title_short">Distance</string>
         <string id="km">km</string>
         <string id="mi">mi</string>
         <string id="start_speed_title">Auto-start speed (in selected units)</string>
+        <string id="start_speed_title_short">Auto-start speed</string>
         <string id="clock_type_title">Clock format</string>
         <string id="clock_type_system">System setting</string>
         <string id="clock_type_24h">Force 24h</string>
         <string id="clock_type_12h">Force 12h</string>
+        <string id="in_device_menu_title">Enable in-device settings menu</string>
+        <string id="in_device_menu_title_short">Device menu</string>
+        <string id="enable">Enable</string>
+        <string id="disable">Disable</string>
+        <string id="quitConf">Really quit?</string>
+        
+        <string id="settingsMenuTitle">Settings</string>
     </strings>
 
 	<settings>
@@ -63,6 +79,9 @@
 				<listEntry value="1">@Strings.clock_type_24h</listEntry>
 				<listEntry value="2">@Strings.clock_type_12h</listEntry>
 			</settingConfig>
+	    </setting>
+	    <setting propertyKey="@Properties.in_device_menu" title="@Strings.in_device_menu_title">
+			<settingConfig type="boolean" />
 	    </setting>
 	</settings>
 </resources>

@@ -1,0 +1,4 @@
+<menu id="auxMenu_units_distance" title="@Strings.units_distance_title_short">
+    <menu-item id="auxMenu_units_distance_km" label="@Strings.km"/>
+    <menu-item id="auxMenu_units_distance_mi" label="@Strings.mi"/>
+</menu>

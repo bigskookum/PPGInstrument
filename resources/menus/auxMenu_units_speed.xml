@@ -1,0 +1,4 @@
+<menu id="auxMenu_units_speed" title="@Strings.units_speed_title_short">
+    <menu-item id="auxMenu_units_speed_kmh" label="@Strings.kmh"/>
+    <menu-item id="auxMenu_units_speed_mph" label="@Strings.mph"/>
+</menu>

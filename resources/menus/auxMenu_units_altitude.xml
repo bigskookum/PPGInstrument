@@ -1,0 +1,4 @@
+<menu id="auxMenu_units_altitude" title="@Strings.units_altitude_title_short">
+    <menu-item id="auxMenu_units_altitude_m" label="@Strings.meters"/>
+    <menu-item id="auxMenu_units_altitude_ft" label="@Strings.feet"/>
+</menu>

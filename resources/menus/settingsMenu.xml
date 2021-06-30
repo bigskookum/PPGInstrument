@@ -1,0 +1,9 @@
+<menu id="settingsMenu" title="@Strings.settingsMenuTitle">
+    <menu-item id="settingsMenu_units_altitude" label="@Strings.units_altitude_title"/>
+    <menu-item id="settingsMenu_units_speed" label="@Strings.units_speed_title"/>
+    <menu-item id="settingsMenu_units_vspeed" label="@Strings.units_vspeed_title_short"/>
+    <menu-item id="settingsMenu_units_distance" label="@Strings.units_distance_title"/>
+    <menu-item id="settingsMenu_start_speed" label="@Strings.start_speed_title_short"/>
+    <menu-item id="settingsMenu_clock_type" label="@Strings.clock_type_title"/>
+    <menu-item id="settingsMenu_in_device_menu" label="@Strings.in_device_menu_title_short"/>
+</menu>

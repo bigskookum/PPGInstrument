@@ -1,0 +1,4 @@
+<menu id="auxMenu_in_device_menu" title="@Strings.in_device_menu_title_short">
+    <menu-item id="auxMenu_in_device_menu_enable" label="@Strings.enable"/>
+    <menu-item id="auxMenu_in_device_menu_disable" label="@Strings.disable"/>
+</menu>

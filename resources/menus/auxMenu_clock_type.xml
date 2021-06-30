@@ -1,0 +1,5 @@
+<menu id="auxMenu_clock_type" title="@Strings.clock_type_title">
+    <menu-item id="auxMenu_clock_type_system" label="@Strings.clock_type_system"/>
+    <menu-item id="auxMenu_clock_type_24h" label="@Strings.clock_type_24h"/>
+    <menu-item id="auxMenu_clock_type_12h" label="@Strings.clock_type_12h"/>
+</menu>

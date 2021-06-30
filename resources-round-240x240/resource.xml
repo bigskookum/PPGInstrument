@@ -33,10 +33,10 @@ marqgolfer
 
 <resources>
     <fonts>
-        <font id="B612Bold_xl" filename="../resources/resource/fonts/B612-Bold_75.fnt" filter="0123456789.:- " antialias="true" />
-        <font id="B612Bold_l" filename="../resources/resource/fonts/B612-Bold_65.fnt" filter="0123456789." antialias="true" />
-        <font id="B612Bold_m" filename="../resources/resource/fonts/B612-Bold_40.fnt" filter="0123456789.+- " antialias="true" />
-		<font id="B612Bold_s" filename="../resources/resource/fonts/B612-Bold_25.fnt" filter="0123456789:amp " antialias="true" />
+        <font id="B612Bold_xl" filename="../resources/fonts/B612-Bold_75.fnt" filter="0123456789.:- " antialias="true" />
+        <font id="B612Bold_l" filename="../resources/fonts/B612-Bold_65.fnt" filter="0123456789." antialias="true" />
+        <font id="B612Bold_m" filename="../resources/fonts/B612-Bold_40.fnt" filter="0123456789.+- " antialias="true" />
+		<font id="B612Bold_s" filename="../resources/fonts/B612-Bold_25.fnt" filter="0123456789:amp " antialias="true" />
     </fonts>
     
     <drawable-list id="white_background">

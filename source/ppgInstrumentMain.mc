@@ -12,6 +12,13 @@ using Toybox.Activity;
 using Toybox.ActivityRecording;
 using Toybox.Attention;
 
+// TODO: make activity recording selectable: on minspeed, always, never.
+// TODO: make colours configurable.
+// TODO: play with the backlight while flying to see if it makes a difference.
+// TODO: auto zero altitude on takeoff option for people who want AGL.
+// TODO: in-watch menu? with option to disable?
+// TODO: check for TODOs.
+
 var homeTrianglePoints;
 
 class dhomeTriangle extends WatchUi.Drawable {
@@ -159,6 +166,7 @@ class ppgInstrumentMain extends WatchUi.View {
 				
 				// there are both screens that are wider than tall (fr920xt) and taller than wide (vivoactive HR)
 		    	// so find the smallest dimension before drawing the circle.
+		    	// TODO: have the arrow go all the way to the edge on rectangular devices.
 		    	var minDim = w > h ? h : w;
 		    	var screenCenterPoint = [w/2, h/2] as Array<Number>;
 				homeTrianglePoints = generateHomeTriangleCoordinates(screenCenterPoint, homeAngleRad - Math.PI, 30, 50, minDim/2);
