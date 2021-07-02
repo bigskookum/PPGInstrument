@@ -49,10 +49,7 @@ class ppgInstrumentMainDelegate extends WatchUi.BehaviorDelegate {
 		{
 			if( value == CONFIRM_YES )
 			{
-				// pop the confirmation dialog associated with this delegate
-				WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-				
-				// the system will automatically pop the top level dialog
+				System.exit();
 			}
 			
 			return true;
