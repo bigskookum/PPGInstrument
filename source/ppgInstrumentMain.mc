@@ -93,7 +93,7 @@ class ppgInstrumentMain extends WatchUi.View {
     	View.findDrawableById("lblDistTrack").setFont(B612Bold_m);
     
     	// on startup, go immediately to GPS wait screen.
-        pushView(new ppgInstrumentWaitingGPS(), new ppgInstrumentWaitingDelegate(), WatchUi.SLIDE_IMMEDIATE);
+        pushView(new ppgInstrumentWaitingGPS(), new ppgInstrumentMainDelegate(), WatchUi.SLIDE_IMMEDIATE);
         
     }
     
@@ -270,7 +270,7 @@ class ppgInstrumentMain extends WatchUi.View {
 				var vibeData = [new Attention.VibeProfile(50, 1000)];
 				Attention.vibrate(vibeData);
 			}
-    		pushView(new ppgInstrumentWaitingGPS(), new ppgInstrumentWaitingDelegate(), WatchUi.SLIDE_IMMEDIATE);
+    		pushView(new ppgInstrumentWaitingGPS(), new ppgInstrumentMainDelegate(), WatchUi.SLIDE_IMMEDIATE);
     	}
     	
     	WatchUi.requestUpdate();
