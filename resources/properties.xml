@@ -8,6 +8,7 @@
         <property id="start_speed" type="number">15</property>
         <property id="clock_type" type="number">0</property>
         <property id="in_device_menu" type="boolean">true</property>
+        <property id="alt_correction" type="boolean">true</property>
     </properties>
 
     <strings>
@@ -36,6 +37,7 @@
         <string id="clock_type_system">System setting</string>
         <string id="clock_type_24h">Force 24h</string>
         <string id="clock_type_12h">Force 12h</string>
+        <string id="alt_correction_title">Correct altitude drift using GPS</string>
         <string id="in_device_menu_title">Enable in-device settings menu</string>
         <string id="in_device_menu_title_short">Device menu</string>
         <string id="enable">Enable</string>
@@ -81,6 +83,9 @@
 			</settingConfig>
 	    </setting>
 	    <setting propertyKey="@Properties.in_device_menu" title="@Strings.in_device_menu_title">
+			<settingConfig type="boolean" />
+	    </setting>
+	    <setting propertyKey="@Properties.alt_correction" title="@Strings.alt_correction_title">
 			<settingConfig type="boolean" />
 	    </setting>
 	</settings>

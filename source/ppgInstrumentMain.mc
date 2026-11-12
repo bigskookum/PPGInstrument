@@ -51,6 +51,20 @@ class ppgInstrumentMain extends WatchUi.View {
 	
 	var oneSecondTimer;
 
+	// Altitude drift correction. Barometric altitude drifts as the weather changes during
+	// a flight. GPS altitude does not drift, but it is noisy, slow, and offset from sea level
+	// by a fixed amount. So GPS is only used to measure how the gap between the two changes
+	// over time; that change is the drift, and it is subtracted from the barometric altitude.
+	const ALT_BASELINE_SAMPLES = 60;   // seconds of level data averaged to get the starting gap.
+	const ALT_DRIFT_TAU = 300.0f;      // smoothing time constant, in seconds.
+	const ALT_LEVEL_VSPEED = 0.5f;     // m/s. GPS altitude lags, so only compare when roughly level.
+	var gpsAltitude as Float?;         // latest GPS altitude; null when there is no good fix.
+	var altGapSum as Float = 0.0f;
+	var altGapCount as Number = 0;
+	var altGapStart as Float?;         // baro minus GPS at the start; null until the baseline is done.
+	var altGapFiltered as Float = 0.0f;
+	var altCorrection as Float = 0.0f; // metres of drift, subtracted from the displayed altitude.
+
     function initialize() {
         View.initialize();
         
@@ -127,6 +141,8 @@ class ppgInstrumentMain extends WatchUi.View {
     	var heading = info.heading;
     	var gpsSpeed = info.speed;
     	var position = info.position;
+    	
+    	gpsAltitude = (info.accuracy == 4) ? info.altitude : null;
     	
     	if (info.accuracy == 4 && heading != null && gpsSpeed != null && position != null) {
     		var headingDeg = Math.toDegrees(heading);
@@ -267,6 +283,7 @@ class ppgInstrumentMain extends WatchUi.View {
     	
     	var positionInfo = Position.getInfo();
     	if (positionInfo.accuracy < 4) {
+    		gpsAltitude = null; // do not correct altitude against a poor fix.
     		if (Attention has :playTone) {
 			   Attention.playTone(Attention.TONE_ALERT_LO);
 			}
@@ -289,6 +306,15 @@ class ppgInstrumentMain extends WatchUi.View {
     		return; // no altitude source yet (e.g. barometer not ready).
     	}
     	
+    	var alt_correction;
+    	if ( Toybox.Application has :Storage ) {
+    		alt_correction = Properties.getValue("alt_correction");
+		} else {
+			alt_correction = Application.getApp().getProperty("alt_correction");
+		}
+		// displayed altitude; vertical speed below keeps using the raw barometric value.
+    	var shownAltitude = (alt_correction == false) ? altitude : altitude - altCorrection;
+    	
     	if ( Toybox.Application has :Storage ) {
     		units_altitude = Properties.getValue("units_altitude");
 		} else {
@@ -296,7 +322,7 @@ class ppgInstrumentMain extends WatchUi.View {
 		}
     	
     	if (units_altitude == 0 ) { // m
-    		alt = altitude;
+    		alt = shownAltitude;
     		// we ignore the case where altitude is greater than 10 km.
     		label("lblAltMslLbl").setText("");
     		label("lblAltMsl").setText((alt).format("%.0f"));
@@ -307,7 +333,7 @@ class ppgInstrumentMain extends WatchUi.View {
 				label("lblAltMslLbl").setText("");
 			}
     	} else { // ==1 is ft
-    		alt = Math.round(altitude * 3.28084f / 10.0f) * 10.0f; // convert m to ft
+    		alt = Math.round(shownAltitude * 3.28084f / 10.0f) * 10.0f; // convert m to ft
     		if (alt >= 10000.0f) {
 				alt = alt / 1000.0f;
 				label("lblAltMslLbl").setText("k ft");
@@ -336,6 +362,8 @@ class ppgInstrumentMain extends WatchUi.View {
     	}
     	vSpeedVal = vSpeedVal / 4; // altitude is in m, so meters per second.
     	
+    	updateAltCorrection(altitude);
+    	
     	
     		
     	if (vSpeedValValidCount < 1) {
@@ -363,6 +391,30 @@ class ppgInstrumentMain extends WatchUi.View {
     	//Toybox.System.println((info.altitude * 3.28084f).toString() + " ft");
     	//Toybox.System.println((info.speed * 3.6f).toString() + " km/h");
     	WatchUi.requestUpdate();
+    }
+    
+    
+    // Called once per second with the raw barometric altitude.
+    function updateAltCorrection(baroAltitude as Float) as Void {
+    	var gps = gpsAltitude;
+    	if (gps == null || vSpeedVal.abs() > ALT_LEVEL_VSPEED) {
+    		return;
+    	}
+    	
+    	var gap = baroAltitude - gps;
+    	var start = altGapStart;
+    	if (start == null) {
+    		// still averaging the starting gap; no correction yet.
+    		altGapSum += gap;
+    		altGapCount++;
+    		if (altGapCount >= ALT_BASELINE_SAMPLES) {
+    			altGapFiltered = altGapSum / altGapCount;
+    			altGapStart = altGapFiltered;
+    		}
+    	} else {
+    		altGapFiltered += (gap - altGapFiltered) / ALT_DRIFT_TAU;
+    		altCorrection = altGapFiltered - start;
+    	}
     }
     
     
