@@ -277,7 +277,9 @@ class ppgInstrumentMain extends WatchUi.View {
     	var start = startMoment;
     	if (recordingState >= 1 && start != null) {
     		var timerDuration = Time.now().subtract(start) as Time.Duration;
-    		var timerString = (timerDuration.value() / 3600).format("%01.0f") + ":" + (timerDuration.value() / 60).format("%02.0f");
+    		var elapsedSeconds = timerDuration.value();
+    		// h:mm, with minutes wrapping at the hour.
+    		var timerString = (elapsedSeconds / 3600).format("%d") + ":" + ((elapsedSeconds % 3600) / 60).format("%02d");
     		label("lblMissionTimer").setText(timerString);
     	}
     	
