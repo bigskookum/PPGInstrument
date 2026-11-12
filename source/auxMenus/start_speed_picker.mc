@@ -1,5 +1,7 @@
-using Toybox.Application.Properties;
+import Toybox.Application.Properties;
 import Toybox.WatchUi;
+import Toybox.Graphics;
+import Toybox.Lang;
 
 class start_speed_picker extends WatchUi.Picker {
 
@@ -41,11 +43,11 @@ class start_speed_pickerDelegate extends WatchUi.PickerDelegate {
         return true;
     }
 
-    public function onAccept(values as Array<Number?>) as Boolean {
+    public function onAccept(values as Array) as Boolean {
 		if ( Toybox.Application has :Storage ) {
-			Properties.setValue("start_speed", values[0]);
+			Properties.setValue("start_speed", values[0] as Number);
 		} else {
-			Application.getApp().setProperty("start_speed", values[0]);
+			Application.getApp().setProperty("start_speed", values[0] as Number);
 		}
 
         WatchUi.popView(WatchUi.SLIDE_RIGHT);

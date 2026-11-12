@@ -1,10 +1,10 @@
-using Toybox.Application;
-using Toybox.WatchUi;
-using Toybox.Position;
-using Toybox.Timer;
-using Toybox.ActivityRecording;
+import Toybox.Application;
+import Toybox.WatchUi;
+import Toybox.Position;
+import Toybox.Timer;
+import Toybox.ActivityRecording;
 
-	var session as Session;
+	var session as Session?;
 
 class ppgInstrumentApp extends Application.AppBase {
 
@@ -19,9 +19,10 @@ class ppgInstrumentApp extends Application.AppBase {
 
     // onStop() is called when your application is exiting
     function onStop(state) {
-    	if (session.isRecording()) {
-    		session.stop();
-    		session.save();
+    	var s = session;
+    	if (s != null && s.isRecording()) {
+    		s.stop();
+    		s.save();
     	}
     }
 

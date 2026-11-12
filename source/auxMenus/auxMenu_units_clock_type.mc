@@ -1,5 +1,6 @@
-using Toybox.WatchUi;
-using Toybox.Application.Properties;
+import Toybox.WatchUi;
+import Toybox.Application.Properties;
+import Toybox.Lang;
 
 class auxMenu_clock_typeDelegate extends WatchUi.MenuInputDelegate {
 

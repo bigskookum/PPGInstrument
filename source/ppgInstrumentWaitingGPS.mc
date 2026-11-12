@@ -1,8 +1,9 @@
-using Toybox.WatchUi;
-using Toybox.Timer;
-using Toybox.Position;
-using Toybox.System;
-using Toybox.Attention;
+import Toybox.WatchUi;
+import Toybox.Timer;
+import Toybox.Position;
+import Toybox.System;
+import Toybox.Attention;
+import Toybox.Lang;
 
 class ppgInstrumentWaitingGPS extends WatchUi.View {
 
@@ -12,6 +13,11 @@ class ppgInstrumentWaitingGPS extends WatchUi.View {
 
     function initialize() {
         View.initialize();
+    }
+
+    // Layout labels are all WatchUi.Text; findDrawableById only promises a Drawable.
+    function label(id as String) as Text {
+        return View.findDrawableById(id) as Text;
     }
 
     // Load your resources here
@@ -39,18 +45,18 @@ class ppgInstrumentWaitingGPS extends WatchUi.View {
     function onHide() {
     }
     
-    function timerCallback() {
+    function timerCallback() as Void {
    		
 	    var positionInfo = Position.getInfo();
 	    
-	    View.findDrawableById("output").setText(positionInfo.accuracy.toString() + "/5");
+	    label("output").setText(positionInfo.accuracy.toString() + "/5");
 	    
 		if (positionInfo.accuracy < 4) {
 			count = countInitValue;
-			View.findDrawableById("count").setText("");
+			label("count").setText("");
 		} else {
 			count--;
-			View.findDrawableById("count").setText((count / 10f).format("%1.1f"));
+			label("count").setText((count / 10f).format("%1.1f"));
 			if (count == 0) { // four seconds of good gps data
 				if (Attention has :playTone) {
 				   Attention.playTone(Attention.TONE_ALERT_HI);

@@ -1,22 +1,17 @@
-using Toybox.WatchUi;
-using Toybox.Position;
-using Toybox.Timer;
-using Toybox.System;
-using Toybox.Math;
-using Toybox.Graphics;
-using Toybox.Time;
-using Toybox.Sensor;
-using Toybox.Application;
-using Toybox.Application.Properties;
-using Toybox.Activity;
-using Toybox.ActivityRecording;
-using Toybox.Attention;
-
-// TODO: make activity recording selectable: on minspeed, always, never.
-// TODO: make colours configurable.
-// TODO: play with the backlight while flying to see if it makes a difference.
-// TODO: auto zero altitude on takeoff option for people who want AGL.
-// TODO: check for TODOs.
+import Toybox.WatchUi;
+import Toybox.Position;
+import Toybox.Timer;
+import Toybox.System;
+import Toybox.Math;
+import Toybox.Graphics;
+import Toybox.Time;
+import Toybox.Sensor;
+import Toybox.Application;
+import Toybox.Application.Properties;
+import Toybox.Activity;
+import Toybox.ActivityRecording;
+import Toybox.Attention;
+import Toybox.Lang;
 
 var homeTrianglePoints;
 
@@ -41,8 +36,8 @@ class ppgInstrumentMain extends WatchUi.View {
 	var B612Bold_m as FontResource?;
 	var B612Bold_s as FontResource?;
 	
-	var altForVSpeed = new[5];
-	var vSpeedVal;
+	var altForVSpeed as Array<Float> = [0.0f, 0.0f, 0.0f, 0.0f, 0.0f] as Array<Float>;
+	var vSpeedVal as Float = 0.0f;
 	var vSpeedValValidCount = 5;
 	var homeAngleRad = 0;
 	
@@ -51,8 +46,8 @@ class ppgInstrumentMain extends WatchUi.View {
     var h;
 	
 	var recordingState = 0;
-	var startMoment as Moment;
-	var startLocation as Location;
+	var startMoment as Moment?;
+	var startLocation as Location?;
 	
 	var oneSecondTimer;
 
@@ -67,10 +62,11 @@ class ppgInstrumentMain extends WatchUi.View {
         settings = System.getDeviceSettings();
         w = settings.screenWidth;
         h = settings.screenHeight;
+    }
 
-        for (var i = 0; i < 5; i++) {
-        	altForVSpeed[i] = 0;
-        }
+    // Layout labels are all WatchUi.Text; findDrawableById only promises a Drawable.
+    function label(id as String) as Text {
+        return View.findDrawableById(id) as Text;
     }
 
     function onLayout(dc) {
@@ -83,14 +79,14 @@ class ppgInstrumentMain extends WatchUi.View {
         
         oneSecondTimer = new Timer.Timer();
     	
-    	View.findDrawableById("lblVs").setFont(B612Bold_m);
-    	View.findDrawableById("lblSpeed").setFont(B612Bold_xl);
-    	View.findDrawableById("lblHeading").setFont(B612Bold_m);
-    	View.findDrawableById("lblAltMsl").setFont(B612Bold_xl);
-    	View.findDrawableById("lblCurrentTime").setFont(B612Bold_s);
-    	View.findDrawableById("lblMissionTimer").setFont(B612Bold_xl);
-    	View.findDrawableById("lblDistHome").setFont(B612Bold_m);
-    	View.findDrawableById("lblDistTrack").setFont(B612Bold_m);
+    	label("lblVs").setFont(B612Bold_m);
+    	label("lblSpeed").setFont(B612Bold_xl);
+    	label("lblHeading").setFont(B612Bold_m);
+    	label("lblAltMsl").setFont(B612Bold_xl);
+    	label("lblCurrentTime").setFont(B612Bold_s);
+    	label("lblMissionTimer").setFont(B612Bold_xl);
+    	label("lblDistHome").setFont(B612Bold_m);
+    	label("lblDistTrack").setFont(B612Bold_m);
     
     	// on startup, go immediately to GPS wait screen.
         pushView(new ppgInstrumentWaitingGPS(), new ppgInstrumentMainDelegate(), WatchUi.SLIDE_IMMEDIATE);
@@ -105,10 +101,10 @@ class ppgInstrumentMain extends WatchUi.View {
 
         if (recordingState < 1) {
         	// blank out data.
-        	View.findDrawableById("lblDistHome").setText("");
-        	View.findDrawableById("lblDistHomeLbl").setText("");
-        	View.findDrawableById("lblDistTrack").setText("");
-        	View.findDrawableById("lblDistTrackLbl").setText("");
+        	label("lblDistHome").setText("");
+        	label("lblDistHomeLbl").setText("");
+        	label("lblDistTrack").setText("");
+        	label("lblDistTrackLbl").setText("");
     	}
 
         View.onUpdate(dc);
@@ -126,11 +122,14 @@ class ppgInstrumentMain extends WatchUi.View {
                       sensorCallback
     *****************************************************/
     
-    function gpsUpdatedCallback(info) {
-    	var speed as float;
+    function gpsUpdatedCallback(info as Position.Info) as Void {
+    	var speed;
+    	var heading = info.heading;
+    	var gpsSpeed = info.speed;
+    	var position = info.position;
     	
-    	if (info.accuracy == 4) {
-    		var headingDeg = Math.toDegrees(info.heading);
+    	if (info.accuracy == 4 && heading != null && gpsSpeed != null && position != null) {
+    		var headingDeg = Math.toDegrees(heading);
     		if (headingDeg < 0) {
     			headingDeg += 360;
     		}
@@ -144,35 +143,36 @@ class ppgInstrumentMain extends WatchUi.View {
 			}
     		
     		if (units_speed == 0 ) { // km/h
-    			speed = info.speed * 3.6f; // convert m/s to km/h
-    			View.findDrawableById("lblSpeedLblk").setText("k");
-    			View.findDrawableById("lblSpeedLblm").setText("m");
+    			speed = gpsSpeed * 3.6f; // convert m/s to km/h
+    			label("lblSpeedLblk").setText("k");
+    			label("lblSpeedLblm").setText("m");
     		} else { // ==1 is mph
-    			speed = info.speed * 2.23694f; // convert m/s to mph
-    			View.findDrawableById("lblSpeedLblk").setText("m");
-    			View.findDrawableById("lblSpeedLblm").setText("p");
+    			speed = gpsSpeed * 2.23694f; // convert m/s to mph
+    			label("lblSpeedLblk").setText("m");
+    			label("lblSpeedLblm").setText("p");
     		}
     		
-    		View.findDrawableById("lblSpeed").setText(speed.format("%2.0f"));
-			View.findDrawableById("lblHeading").setText(headingDeg.format("%3.0f")); // source in true degrees
+    		label("lblSpeed").setText(speed.format("%2.0f"));
+			label("lblHeading").setText(headingDeg.format("%3.0f")); // source in true degrees
 			
-			if (recordingState >= 1) {
+			var home = startLocation;
+			if (recordingState >= 1 && home != null) {
 				var distHome;
-				var startLocationRads = startLocation.toRadians();
-				var thisLocationRads = info.position.toRadians();
+				var startLocationRads = home.toRadians();
+				var thisLocationRads = position.toRadians();
 				distHome = distance_rad_m(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) ;
-				homeAngleRad = bearing_rad_rad(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) - info.heading;
+				homeAngleRad = bearing_rad_rad(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) - heading;
 				
 				// there are both screens that are wider than tall (fr920xt) and taller than wide (vivoactive HR)
 		    	// so find the smallest dimension before drawing the circle.
-		    	// TODO: have the arrow go all the way to the edge on rectangular devices.
 		    	var minDim = w > h ? h : w;
 		    	var screenCenterPoint = [w/2, h/2] as Array<Number>;
 				homeTrianglePoints = generateHomeTriangleCoordinates(screenCenterPoint, homeAngleRad - Math.PI, 30, 50, minDim/2);
 				
 				var actInfo = Activity.getActivityInfo();
 				
-				if (actInfo.elapsedDistance != null) { // TODO: fix this workaround. seems to only occur with the simulator.
+				var elapsedDistance = (actInfo != null) ? actInfo.elapsedDistance : null;
+				if (elapsedDistance != null) { // can be null before the activity has distance (seen in the simulator).
 				
 				var units_distance;
 				
@@ -183,13 +183,13 @@ class ppgInstrumentMain extends WatchUi.View {
 				}
 				
 					if (units_distance == 0) { // 0 == km
-						View.findDrawableById("lblDistHome").setText((Math.floor(distHome / 100.0f)/10).format("%2.1f"));
-						View.findDrawableById("lblDistTrack").setText(Math.floor(actInfo.elapsedDistance / 1000f).format("%3.0f"));
-						View.findDrawableById("lblDistTrackLbl").setText("tot km");
+						label("lblDistHome").setText((Math.floor(distHome / 100.0f)/10).format("%2.1f"));
+						label("lblDistTrack").setText(Math.floor(elapsedDistance / 1000f).format("%3.0f"));
+						label("lblDistTrackLbl").setText("tot km");
 					} else { // 1 == mi
-						View.findDrawableById("lblDistHome").setText((Math.floor(distHome / 160.934f)/10).format("%2.1f"));
-						View.findDrawableById("lblDistTrack").setText(Math.floor(actInfo.elapsedDistance / 1609.34f).format("%3.0f"));
-						View.findDrawableById("lblDistTrackLbl").setText("tot mi");
+						label("lblDistHome").setText((Math.floor(distHome / 160.934f)/10).format("%2.1f"));
+						label("lblDistTrack").setText(Math.floor(elapsedDistance / 1609.34f).format("%3.0f"));
+						label("lblDistTrackLbl").setText("tot mi");
 					}
 				}
 				//Toybox.System.println(distHome.format("%.1f"));
@@ -205,14 +205,17 @@ class ppgInstrumentMain extends WatchUi.View {
 				start_speed = Application.getApp().getProperty("start_speed");
 			}
 			
-			if ((speed >= start_speed) and (recordingState == 0)) {
+			if ((speed >= (start_speed as Number)) and (recordingState == 0)) {
 				startMoment = Time.now();
-				startLocation = info.position;
-				session.start();
+				startLocation = position;
+				var s = session;
+				if (s != null) {
+					s.start();
+				}
 				recordingState = 1;
 				
-				View.findDrawableById("lblDistHomeLbl").setText("home");
-				View.findDrawableById("lblDistTrackLbl").setText("tot");
+				label("lblDistHomeLbl").setText("home");
+				label("lblDistTrackLbl").setText("tot");
 			}
 			
 			//Toybox.System.println(info.heading.toString());
@@ -220,7 +223,7 @@ class ppgInstrumentMain extends WatchUi.View {
     	} // if (info.accuracy == 4)
     }
     
-    function oneSecondTimerCallback() {
+    function oneSecondTimerCallback() as Void {
 
     	var clockMode24h = System.getDeviceSettings().is24Hour;
     	var clock_type;
@@ -253,12 +256,13 @@ class ppgInstrumentMain extends WatchUi.View {
 			}
 			nowString = now.hour.format("%d") + ":" + now.min.format("%02d") + ":" + now.sec.format("%02d") + ampm;
     	}
-    	View.findDrawableById("lblCurrentTime").setText(nowString);
+    	label("lblCurrentTime").setText(nowString);
     	
-    	if (recordingState >= 1) {
-    		var timerDuration = Time.now().subtract(startMoment);
+    	var start = startMoment;
+    	if (recordingState >= 1 && start != null) {
+    		var timerDuration = Time.now().subtract(start) as Time.Duration;
     		var timerString = (timerDuration.value() / 3600).format("%01.0f") + ":" + (timerDuration.value() / 60).format("%02.0f");
-    		View.findDrawableById("lblMissionTimer").setText(timerString);
+    		label("lblMissionTimer").setText(timerString);
     	}
     	
     	var positionInfo = Position.getInfo();
@@ -276,9 +280,14 @@ class ppgInstrumentMain extends WatchUi.View {
     	WatchUi.requestUpdate();
     }
     
-    function sensorCallback(info) {
-    	var alt as float;
+    function sensorCallback(info as Sensor.Info) as Void {
+    	var alt;
+    	var altitude = info.altitude;
     	var units_altitude;
+    	
+    	if (altitude == null) {
+    		return; // no altitude source yet (e.g. barometer not ready).
+    	}
     	
     	if ( Toybox.Application has :Storage ) {
     		units_altitude = Properties.getValue("units_altitude");
@@ -287,41 +296,41 @@ class ppgInstrumentMain extends WatchUi.View {
 		}
     	
     	if (units_altitude == 0 ) { // m
-    		alt = info.altitude;
+    		alt = altitude;
     		// we ignore the case where altitude is greater than 10 km.
-    		View.findDrawableById("lblAltMslLbl").setText("");
-    		View.findDrawableById("lblAltMsl").setText((alt).format("%.0f"));
-			View.findDrawableById("lblAltMsl").setFont(B612Bold_xl);
+    		label("lblAltMslLbl").setText("");
+    		label("lblAltMsl").setText((alt).format("%.0f"));
+			label("lblAltMsl").setFont(B612Bold_xl);
 			if (alt < 1000.0f) {
-				View.findDrawableById("lblAltMslLbl").setText("m");
+				label("lblAltMslLbl").setText("m");
 			} else {
-				View.findDrawableById("lblAltMslLbl").setText("");
+				label("lblAltMslLbl").setText("");
 			}
     	} else { // ==1 is ft
-    		alt = Math.round(info.altitude * 3.28084f / 10.0f) * 10.0f; // convert m to ft
+    		alt = Math.round(altitude * 3.28084f / 10.0f) * 10.0f; // convert m to ft
     		if (alt >= 10000.0f) {
 				alt = alt / 1000.0f;
-				View.findDrawableById("lblAltMslLbl").setText("k ft");
-				View.findDrawableById("lblAltMsl").setText((alt).format("%2.2f"));
-				View.findDrawableById("lblAltMsl").setFont(B612Bold_l);
+				label("lblAltMslLbl").setText("k ft");
+				label("lblAltMsl").setText((alt).format("%2.2f"));
+				label("lblAltMsl").setFont(B612Bold_l);
 				// lblAltMslLbl.setLocation(w*0.95,h*0.56); // forget why this was here.
 			} else {
 				if (alt < 1000.0f) {
-					View.findDrawableById("lblAltMslLbl").setText("ft");
+					label("lblAltMslLbl").setText("ft");
 				} else {
-					View.findDrawableById("lblAltMslLbl").setText("");
+					label("lblAltMslLbl").setText("");
 				}
-				View.findDrawableById("lblAltMsl").setText((alt).format("%.0f"));
-				View.findDrawableById("lblAltMsl").setFont(B612Bold_xl);
+				label("lblAltMsl").setText((alt).format("%.0f"));
+				label("lblAltMsl").setFont(B612Bold_xl);
 			}
     	}
 		
 		// update the array of last 5 altitudes, for vertical speed averaging.
 		// standard boxcar filter.
     	altForVSpeed = altForVSpeed.slice(1,null);
-    	altForVSpeed.add(info.altitude); // appended to end; latest data is always at the end.
+    	altForVSpeed.add(altitude); // appended to end; latest data is always at the end.
     	
-    	vSpeedVal = 0;
+    	vSpeedVal = 0.0f;
     	for (var i = 0; i < 4; i++) {
     		vSpeedVal += altForVSpeed[i+1] - altForVSpeed[i];
     	}
@@ -341,11 +350,11 @@ class ppgInstrumentMain extends WatchUi.View {
     	
     		if (units_vspeed == 1 ) { // 0 == mps; 1 == fpm
     			vSpeedVal = vSpeedVal * 196.85f; // convert to feet per minute
-	    		View.findDrawableById("lblVs").setText(vSpeedVal.format("%+3.0f"));
-	    		View.findDrawableById("lblVsLbl").setText("fpm");
+	    		label("lblVs").setText(vSpeedVal.format("%+3.0f"));
+	    		label("lblVsLbl").setText("fpm");
     		} else {
-    			View.findDrawableById("lblVs").setText(vSpeedVal.format("%+.1f"));
-    			View.findDrawableById("lblVsLbl").setText("m/s");
+    			label("lblVs").setText(vSpeedVal.format("%+.1f"));
+    			label("lblVsLbl").setText("m/s");
     		}
 		} else {
 			vSpeedValValidCount--;

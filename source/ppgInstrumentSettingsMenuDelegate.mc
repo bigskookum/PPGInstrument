@@ -1,4 +1,5 @@
-using Toybox.WatchUi;
+import Toybox.WatchUi;
+import Toybox.Lang;
 
 class settingsMenuDelegate extends WatchUi.MenuInputDelegate {
 
