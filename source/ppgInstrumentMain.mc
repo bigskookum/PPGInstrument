@@ -152,11 +152,7 @@ class ppgInstrumentMain extends WatchUi.View {
     		
     		var units_speed;
     		
-    		if ( Toybox.Application has :Storage ) {
-				units_speed = Properties.getValue("units_speed");
-			} else {
-				units_speed = Application.getApp().getProperty("units_speed");
-			}
+    		units_speed = getSetting("units_speed");
     		
     		if (units_speed == 0 ) { // km/h
     			speed = gpsSpeed * 3.6f; // convert m/s to km/h
@@ -192,11 +188,7 @@ class ppgInstrumentMain extends WatchUi.View {
 				
 				var units_distance;
 				
-				if ( Toybox.Application has :Storage ) {
-					units_distance = Properties.getValue("units_distance");
-				} else {
-					units_distance = Application.getApp().getProperty("units_distance");
-				}
+				units_distance = getSetting("units_distance");
 				
 					if (units_distance == 0) { // 0 == km
 						label("lblDistHome").setText((Math.floor(distHome / 100.0f)/10).format("%2.1f"));
@@ -215,11 +207,7 @@ class ppgInstrumentMain extends WatchUi.View {
 			
 			var start_speed;
 			
-			if ( Toybox.Application has :Storage ) {
-				start_speed = Properties.getValue("start_speed");
-			} else {
-				start_speed = Application.getApp().getProperty("start_speed");
-			}
+			start_speed = getSetting("start_speed");
 			
 			if ((speed >= (start_speed as Number)) and (recordingState == 0)) {
 				startMoment = Time.now();
@@ -244,11 +232,7 @@ class ppgInstrumentMain extends WatchUi.View {
     	var clockMode24h = System.getDeviceSettings().is24Hour;
     	var clock_type;
     	
-    	if ( Toybox.Application has :Storage ) {
-			clock_type = Properties.getValue("clock_type");
-		} else {
-			clock_type = Application.getApp().getProperty("clock_type");
-		}
+    	clock_type = getSetting("clock_type");
     	
     	if (clock_type == 1) { // 0 = use system setting. 1 = force 24h
     		clockMode24h = true;
@@ -309,19 +293,11 @@ class ppgInstrumentMain extends WatchUi.View {
     	}
     	
     	var alt_correction;
-    	if ( Toybox.Application has :Storage ) {
-    		alt_correction = Properties.getValue("alt_correction");
-		} else {
-			alt_correction = Application.getApp().getProperty("alt_correction");
-		}
+    	alt_correction = getSetting("alt_correction");
 		// displayed altitude; vertical speed below keeps using the raw barometric value.
     	var shownAltitude = (alt_correction == false) ? altitude : altitude - altCorrection;
     	
-    	if ( Toybox.Application has :Storage ) {
-    		units_altitude = Properties.getValue("units_altitude");
-		} else {
-			units_altitude = Application.getApp().getProperty("units_altitude");
-		}
+    	units_altitude = getSetting("units_altitude");
     	
     	if (units_altitude == 0 ) { // m
     		alt = shownAltitude;
@@ -372,11 +348,7 @@ class ppgInstrumentMain extends WatchUi.View {
     	
     		var units_vspeed;
     	
-    		if ( Toybox.Application has :Storage ) {
-	    		units_vspeed = Properties.getValue("units_vspeed");
-			} else {
-				units_vspeed = Application.getApp().getProperty("units_vspeed");
-			}
+    		units_vspeed = getSetting("units_vspeed");
     	
     		if (units_vspeed == 1 ) { // 0 == mps; 1 == fpm
     			vSpeedVal = vSpeedVal * 196.85f; // convert to feet per minute

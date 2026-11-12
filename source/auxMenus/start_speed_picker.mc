@@ -15,11 +15,7 @@ class start_speed_picker extends WatchUi.Picker {
 		
 		// set initial value to current stored value.
 		var start_speed;
-		if ( Toybox.Application has :Storage ) {
-			start_speed = Properties.getValue("start_speed");
-		} else {
-			start_speed = Application.getApp().getProperty("start_speed");
-		}
+		start_speed = getSetting("start_speed");
     	var defaults = [factory.getIndex(start_speed)];
     
     	Picker.initialize({:title=>title, :pattern=>[factory], :defaults=>defaults});
@@ -44,11 +40,7 @@ class start_speed_pickerDelegate extends WatchUi.PickerDelegate {
     }
 
     public function onAccept(values as Array) as Boolean {
-		if ( Toybox.Application has :Storage ) {
-			Properties.setValue("start_speed", values[0] as Number);
-		} else {
-			Application.getApp().setProperty("start_speed", values[0] as Number);
-		}
+		setSetting("start_speed", values[0] as Number);
 
         WatchUi.popView(WatchUi.SLIDE_RIGHT);
         return true;

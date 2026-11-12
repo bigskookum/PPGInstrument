@@ -11,11 +11,7 @@ class ppgInstrumentMainDelegate extends WatchUi.BehaviorDelegate {
     public function onMenu() as Boolean {
     	var in_device_menu;
     		
-		if ( Toybox.Application has :Storage ) {
-			in_device_menu = Properties.getValue("in_device_menu");
-		} else {
-			in_device_menu = Application.getApp().getProperty("in_device_menu");
-		}
+		in_device_menu = getSetting("in_device_menu");
 		if (in_device_menu == true) {
         	WatchUi.pushView(new $.Rez.Menus.settingsMenu(), new $.settingsMenuDelegate(), WatchUi.SLIDE_LEFT);
     	}

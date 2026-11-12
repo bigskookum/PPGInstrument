@@ -1,1 +1,16 @@
 project.manifest = manifest.xml
+
+# Settings storage (see source/settings.mc).
+# Watches on Connect IQ 2.4+ use Application.Properties; the legacy version is left out.
+base.excludeAnnotations = legacySettings
+
+# Watches below Connect IQ 2.4 have no Application.Properties, so they get the legacy
+# version instead. Keep this list in step with manifest.xml.
+d2bravo.excludeAnnotations = modernSettings
+d2bravo_titanium.excludeAnnotations = modernSettings
+fenix3.excludeAnnotations = modernSettings
+fenix3_hr.excludeAnnotations = modernSettings
+fr230.excludeAnnotations = modernSettings
+fr235.excludeAnnotations = modernSettings
+fr630.excludeAnnotations = modernSettings
+fr920xt.excludeAnnotations = modernSettings
