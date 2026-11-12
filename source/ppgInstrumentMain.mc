@@ -175,11 +175,12 @@ class ppgInstrumentMain extends WatchUi.View {
 				distHome = distance_rad_m(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) ;
 				homeAngleRad = bearing_rad_rad(startLocationRads[0], startLocationRads[1], thisLocationRads[0], thisLocationRads[1]) - heading;
 				
-				// there are both screens that are wider than tall (fr920xt) and taller than wide (vivoactive HR)
-		    	// so find the smallest dimension before drawing the circle.
-		    	var minDim = w > h ? h : w;
+		    	// the arrow tip sits on the edge of the screen, whatever its shape.
 		    	var screenCenterPoint = [w/2, h/2] as Array<Number>;
-				homeTrianglePoints = generateHomeTriangleCoordinates(screenCenterPoint, homeAngleRad - Math.PI, 30, 50, minDim/2);
+		    	var arrowAngle = homeAngleRad - Math.PI;
+		    	// arrow size scales with the screen: 30 x 50 pixels on a 240 pixel screen.
+		    	var minDim = (w < h) ? w : h;
+				homeTrianglePoints = generateHomeTriangleCoordinates(screenCenterPoint, arrowAngle, minDim / 8, minDim * 5 / 24, distanceToScreenEdge(arrowAngle));
 				
 				var actInfo = Activity.getActivityInfo();
 				
@@ -394,19 +395,48 @@ class ppgInstrumentMain extends WatchUi.View {
     
     /*****************************************************
                      UTILITY FUNCTIONS
+                    distanceToScreenEdge
                generateHomeTriangleCoordinates
                       distance_rad_m
                       bearing_rad_rad
     *****************************************************/
     
-	function generateHomeTriangleCoordinates(centerPoint as Array<Number>, angle as Float, height as Number, width as Number, offset as Number) as Array< Array<Float> > {
+	// Distance in pixels from the screen centre to the screen edge, in the direction the
+	// home arrow points for the given angle (zero is straight down, as in
+	// generateHomeTriangleCoordinates).
+	function distanceToScreenEdge(angle) {
+		var halfW = w / 2.0f;
+		var halfH = h / 2.0f;
+		var shape = settings.screenShape;
+		
+		if (shape == System.SCREEN_SHAPE_ROUND) {
+			return (halfW < halfH) ? halfW : halfH;
+		}
+		
+		var sin = Math.sin(angle);
+		var cos = Math.cos(angle);
+		if (sin < 0) { sin = -sin; }
+		if (cos < 0) { cos = -cos; }
+		
+		// how far until the top or bottom edge is reached, and how far until a side is reached.
+		var toTopOrBottom = (cos > 0.001f) ? halfH / cos : 100000.0f;
+		var toSide = (sin > 0.001f) ? halfW / sin : 100000.0f;
+		
+		if (shape == System.SCREEN_SHAPE_SEMI_ROUND) {
+			// a circle with the top and bottom cut off flat.
+			toSide = halfW;
+		}
+		return (toSide < toTopOrBottom) ? toSide : toTopOrBottom;
+	}
+	
+	function generateHomeTriangleCoordinates(centerPoint as Array<Number>, angle as Float, height as Number, width as Number, offset as Numeric) as Array< Array<Float> > {
 		// generates the points for a triagle, pointing a certain angle, near the edge of the screen.
 		 // note: zero angle is pointing DOWN.
 		
         // Map out the coordinates of the triangle
-        var coords = [[0, 0+offset] as Array<Number>,
-                      [-(width / 2), -height+offset] as Array<Number>,
-                      [(width / 2), -height+offset] as Array<Number>] as Array< Array<Number> >;
+        var coords = [[0, 0+offset] as Array<Numeric>,
+                      [-(width / 2), -height+offset] as Array<Numeric>,
+                      [(width / 2), -height+offset] as Array<Numeric>] as Array< Array<Numeric> >;
         var result = new Array< Array<Float> >[3];
         var cos = Math.cos(angle);
         var sin = Math.sin(angle);
