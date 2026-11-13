@@ -11,13 +11,10 @@ class ppgInstrumentApp extends Application.AppBase {
 
     function initialize() {
         AppBase.initialize();
-        // Record as a flying activity where the watch knows that sport (Connect IQ 3.2+).
-        // Older watches fall back to the default, which is a generic activity.
-        if (Toybox.Activity has :SPORT_FLYING) {
-        	session = ActivityRecording.createSession({:name=>"PPG", :sport=>Activity.SPORT_FLYING});
-        } else {
-        	session = ActivityRecording.createSession({:name=>"PPG"});
-        }
+        // No sport is given, so the watch records a generic activity (the documented default).
+        // Do not use Activity.SPORT_FLYING: it restarts the Venu X1 when recording starts,
+        // and there is no way to tell which watches accept it.
+        session = ActivityRecording.createSession({:name=>"PPG"});
     }
 
     // onStart() is called on application start up
