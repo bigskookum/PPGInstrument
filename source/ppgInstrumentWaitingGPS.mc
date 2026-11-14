@@ -23,14 +23,16 @@ class ppgInstrumentWaitingGPS extends WatchUi.View {
     // Load your resources here
     function onLayout(dc) {
         setLayout(Rez.Layouts.WaitingGPSLayout(dc));
-        waitTimer.start(method(:timerCallback), 100, true);
-    	count = countInitValue; // used to be 40 for 4 seconds but fuggit
     }
 
     // Called when this View is brought to the foreground. Restore
     // the state of this View and prepare it to be shown. This includes
     // loading resources into memory.
     function onShow() {
+        // The timer only runs while this screen is in front. If it kept running under the
+        // settings menu, a completed fix would close the menu instead of this screen.
+        count = countInitValue; // used to be 40 for 4 seconds but fuggit
+        waitTimer.start(method(:timerCallback), 100, true);
     }
 
     // Update the view
@@ -43,6 +45,7 @@ class ppgInstrumentWaitingGPS extends WatchUi.View {
     // state of this View here. This includes freeing resources from
     // memory.
     function onHide() {
+        waitTimer.stop();
     }
     
     function timerCallback() as Void {
