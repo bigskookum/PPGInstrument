@@ -46,6 +46,7 @@ class ppgInstrumentMainDelegate extends WatchUi.BehaviorDelegate {
 		{
 			if( value == CONFIRM_YES )
 			{
+				shutDown();
 				System.exit();
 			}
 			
